@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
 import { API_BASE_URL } from '../../utils/constants';
-import { CurrentUserService } from './current-user.service';
 
 export interface JwtPayload {
   id: string;

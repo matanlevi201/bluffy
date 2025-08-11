@@ -22,12 +22,10 @@ export class Signin {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.signinModel);
     this.authService
       .signin(this.signinModel.email, this.signinModel.password)
       .subscribe({
         next: () => {
-          console.log('asasas');
           this.router.navigate(['/home']);
         },
         error: (err) => {

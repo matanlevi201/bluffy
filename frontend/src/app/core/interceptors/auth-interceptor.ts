@@ -10,11 +10,9 @@ import {
 } from 'rxjs';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const router = inject(Router);
 
   if (!(window as any)._refreshing) {
     (window as any)._refreshing = false;
@@ -27,6 +25,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     ._refreshTokenSubject;
 
   const authReq = req.clone({ withCredentials: true });
+
+  if (req.url.includes('/auth/refresh')) {
+    return next(req);
+  }
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -44,7 +46,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             catchError((err) => {
               (window as any)._refreshing = false;
               authService.signout().subscribe();
-              router.navigate(['/signin']);
               return throwError(() => err);
             })
           );

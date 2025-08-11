@@ -151,6 +151,6 @@ export class AuthService {
   signout(res: Response) {
     res.clearCookie('accessToken');
     res.clearCookie('refreshToken');
-    return 'signout router';
+    return res.send();
   }
 }
