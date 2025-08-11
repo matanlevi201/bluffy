@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SigninM } from './signin.model';
 import { AuthService } from '../../core/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './signin.html',
   styleUrl: './signin.css',
   standalone: true,

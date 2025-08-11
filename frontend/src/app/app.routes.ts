@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/signin/signin').then((m) => m.Signin),
   },
-
+  {
+    path: 'signup',
+    loadComponent: () =>
+      import('./features/signup/signup').then((m) => m.Signup),
+  },
   { path: '**', redirectTo: 'signin' },
 ];

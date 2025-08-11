@@ -14,6 +14,14 @@ export interface JwtPayload {
 export class AuthService {
   constructor(private http: HttpClient) {}
 
+  signup(name: string, email: string, password: string) {
+    return this.http.post(
+      `${API_BASE_URL}/auth/signup`,
+      { name, email, password },
+      { withCredentials: true }
+    );
+  }
+
   signin(email: string, password: string) {
     return this.http.post(
       `${API_BASE_URL}/auth/signin`,
