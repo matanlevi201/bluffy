@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateRoomDto } from './dtos/create-room.dto';
 import { customAlphabet } from 'nanoid';
 
 @Injectable()
@@ -25,10 +24,10 @@ export class RoomsService {
     return code;
   }
 
-  async createRoom(createRoomDto: CreateRoomDto) {
+  async createRoom(hostId: string) {
     const code = await this.generateUniqueRoomCode();
     return await this.prisma.room.create({
-      data: { roomCode: code, hostId: createRoomDto.hostId },
+      data: { roomCode: code, hostId },
     });
   }
 }
