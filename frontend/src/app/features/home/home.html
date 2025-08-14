@@ -1,1 +1,49 @@
-<p>Welcome Home</p>
+<div class="space-y-6">
+  <div class="flex flex-col items-center">
+    <ng-container *ngIf="currentUser$ | async as currentUser">
+      <app-avatar [src]="(currentUser | addAvatar)?.avatar" class="size-24" />
+      <span class="font-semibold text-xl">{{ currentUser.name }}</span>
+      <span class="font-semibold text-sm text-gray-600">score: 96</span>
+    </ng-container>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <button
+      class="text-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 shadow-lg rounded-2xl flex gap-2 justify-center items-center"
+    >
+      <span>+</span>
+      <span>Create Game</span>
+    </button>
+
+    <div class="flex bg-white items-center rounded-xl gap-1 p-3">
+      <input
+        [value]="roomCode()"
+        (input)="updateField($event)"
+        type="text"
+        placeholder="# Enter Room Code..."
+        class="flex-1 text-sm border-none focus:outline-none"
+      />
+      <button
+        [disabled]="!roomCode()"
+        class="text-sm font-semibold rounded-lg bg-amber-200 py-2 px-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white disabled:opacity-50"
+      >
+        Join
+      </button>
+    </div>
+  </div>
+
+  <ul
+    class="flex flex-col gap-2 bg-white/70 backdrop-blur-sm rounded-2xl p-3 shadow-lg border border-white/20"
+  >
+    <div class="font-semibold">Player Board</div>
+    @for (player of players$ | async; track player.id) {
+    <li class="flex items-center bg-white/60 rounded-xl p-2 gap-3 shadow-sm">
+      <app-avatar [src]="(player | addAvatar)?.avatar" />
+      <span class="font-semibold text-sm text-gray-600 flex flex-col">
+        <span>{{ player.name }}</span>
+        <span class="text-xs">score: 56</span>
+      </span>
+    </li>
+    }
+  </ul>
+</div>
