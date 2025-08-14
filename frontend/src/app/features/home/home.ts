@@ -5,11 +5,12 @@ import { Avatar } from '../../shared/ui/avatar/avatar';
 import { CurrentUserService } from '../../core/services/current-user.service';
 import { AddAvatarPipe } from '../../core/pipes/add-avatar-pipe';
 import { RoomsService } from '../../core/services/rooms.service';
+import { RoomInput } from '../../shared/ui/room-input/room-input';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [AsyncPipe, Avatar, CommonModule, AddAvatarPipe],
+  imports: [AsyncPipe, Avatar, CommonModule, AddAvatarPipe, RoomInput],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -35,9 +36,13 @@ export class Home implements OnInit {
     }
   }
 
-  createRooms() {
+  createRoom() {
     this.roomsService
       .createRoom()
       .subscribe({ next: () => this.router.navigate(['lobby']) });
+  }
+
+  handleSubmit(value: string) {
+    console.log(value);
   }
 }

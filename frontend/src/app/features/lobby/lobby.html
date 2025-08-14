@@ -1,8 +1,104 @@
 <div *ngIf="activeRoom$ | async as activeRoom; else loading">
-  <h1>Lobby: {{ activeRoom.roomCode }}</h1>
-  <p>Host: {{ activeRoom.id }}</p>
+  <div
+    class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-6 mb-4 shadow-lg"
+  >
+    <div class="text-center">
+      <p class="text-white/80 font-medium mb-2">Room Code</p>
+      <div class="flex items-center justify-center gap-3">
+        <span class="text-3xl font-black text-white tracking-wider">
+          {{ activeRoom.roomCode }}
+        </span>
+        <button
+          (click)="copyToClipboard(activeRoom.roomCode)"
+          class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white"
+        >
+          {{ copied() ? "✓" : "📋" }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-col gap-2 bg-white/70 backdrop-blur-sm rounded-2xl p-3 shadow-lg border border-white/20 mb-4"
+  >
+    <div class="font-semibold flex justify-between items-center">
+      <span>👥 Players</span>
+      <span class="text-gray-500 text-sm">1/6</span>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="bg-white p-2 flex flex-col items-center shadow-md rounded-xl">
+        <ng-container *ngIf="currentUser$ | async as currentUser">
+          <app-avatar
+            [src]="(currentUser | addAvatar)?.avatar"
+            class="size-10"
+          />
+          <span class="font-semibold text-md text-gray-600">{{
+            currentUser.name
+          }}</span>
+          <div
+            class="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold px-2 py-1 rounded-full"
+          >
+            👑 Host
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="bg-blue-50/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-blue-200/20 mb-4"
+  >
+    <h3 class="font-bold text-blue-800 mb-2">📋 How to Play</h3>
+    <ul class="text-sm text-blue-700 space-y-1">
+      <li>• Everyone gets the same word except one "bluffer"</li>
+      <li>• Discuss and try to find the bluffer</li>
+      <li>• Vote for who you think is bluffing</li>
+      <li>• Score points for correct guesses!</li>
+    </ul>
+  </div>
+
+  <button
+    class="w-full p-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-2xl"
+  >
+    Start Game ->
+  </button>
 </div>
 
 <ng-template #loading>
-  <div>Loadind...</div>
+  <div class="text-7xl mt-2 mb-6 animate-bounce text-center">🎮</div>
+
+  <div class="text-center mb-8">
+    <h2 class="text-2xl font-black text-gray-800 mb-2">No Active Room</h2>
+    <p class="text-gray-600 font-medium">
+      Create a new game or join an existing one
+    </p>
+  </div>
+
+  <div class="space-y-4">
+    <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-6">
+      <div class="text-center text-white mb-4">
+        <h3 class="text-xl font-bold mb-2">✨ Create New Room</h3>
+        <p class="text-white/80 text-sm">
+          Start a fresh game and invite friends
+        </p>
+      </div>
+      <button
+        (click)="createRoom()"
+        class="w-full h-12 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl backdrop-blur-sm border border-white/20"
+      >
+        Create Room
+      </button>
+    </div>
+    <div
+      class="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+    >
+      <div class="text-center mb-4">
+        <h3 class="text-xl font-bold text-gray-800 mb-2">
+          🔗 Join Existing Room
+        </h3>
+        <p class="text-gray-600 text-sm">Enter a room code from a friend</p>
+      </div>
+      <app-room-input (submit)="handleSubmit($event)" />
+    </div>
+  </div>
 </ng-template>
