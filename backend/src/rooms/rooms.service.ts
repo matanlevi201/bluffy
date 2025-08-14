@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { customAlphabet } from 'nanoid';
 
@@ -24,10 +24,25 @@ export class RoomsService {
     return code;
   }
 
+  async getActiveRoom(roomCode: string) {
+    const room = await this.prisma.room.findUnique({
+      where: { roomCode, status: 'waiting' },
+    });
+    if (!room) {
+      throw new NotFoundException();
+    }
+    return room;
+  }
+
   async createRoom(hostId: string) {
     const code = await this.generateUniqueRoomCode();
-    return await this.prisma.room.create({
-      data: { roomCode: code, hostId },
+    return await this.prisma.$transaction(async (tx) => {
+      await tx.room.deleteMany({
+        where: { hostId, status: 'waiting' },
+      });
+      return await tx.room.create({
+        data: { roomCode: code, hostId },
+      });
     });
   }
 }

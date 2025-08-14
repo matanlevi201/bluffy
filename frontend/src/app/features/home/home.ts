@@ -4,6 +4,8 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { Avatar } from '../../shared/ui/avatar/avatar';
 import { CurrentUserService } from '../../core/services/current-user.service';
 import { AddAvatarPipe } from '../../core/pipes/add-avatar-pipe';
+import { RoomsService } from '../../core/services/rooms.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,8 @@ import { AddAvatarPipe } from '../../core/pipes/add-avatar-pipe';
 export class Home implements OnInit {
   private playersService = inject(PlayersService);
   private currentUserService = inject(CurrentUserService);
+  private roomsService = inject(RoomsService);
+  private router = inject(Router);
 
   players$ = this.playersService.getPlayers();
   currentUser$ = this.currentUserService.getCurrentUser();
@@ -29,5 +33,11 @@ export class Home implements OnInit {
     if (input) {
       this.roomCode.set(input.value);
     }
+  }
+
+  createRooms() {
+    this.roomsService
+      .createRoom()
+      .subscribe({ next: () => this.router.navigate(['lobby']) });
   }
 }

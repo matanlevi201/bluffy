@@ -1,1 +1,8 @@
-<p>lobby works!</p>
+<div *ngIf="activeRoom$ | async as activeRoom; else loading">
+  <h1>Lobby: {{ activeRoom.roomCode }}</h1>
+  <p>Host: {{ activeRoom.id }}</p>
+</div>
+
+<ng-template #loading>
+  <div>Loadind...</div>
+</ng-template>

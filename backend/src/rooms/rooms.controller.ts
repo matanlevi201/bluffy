@@ -1,4 +1,4 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
@@ -6,6 +6,11 @@ import { JwtAuthGuard } from 'src/auth/jwt.guard';
 @UseGuards(JwtAuthGuard)
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
+
+  @Get(':roomCode')
+  getActiveRoom(@Param('roomCode') roomCode: string) {
+    return this.roomsService.getActiveRoom(roomCode);
+  }
 
   @Post('')
   createRoom(@Req() req) {
